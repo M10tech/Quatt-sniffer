@@ -358,6 +358,7 @@ sensor: ## remember this setup MUST match the commands that a CIC sends to a Qua
 
 ## Register 2118 (defrost) is placed into binary sensors in the next section    
 
+## Some of the register 2119 status bits placed into binary sensors in the next section
 - platform: modbus_controller
   modbus_controller_id: modbus_device_1
   name: "HP1 - Status bits 1"
@@ -533,3 +534,48 @@ binary_sensor:
   icon: mdi:snowflake
   register_type: holding
   address: 2118  
+
+##Selection of register 2119 status bits put into binary sensors
+- platform: modbus_controller
+  modbus_controller_id: modbus_device_1
+  name: "HP1 - Protection - Main line current"
+  icon: mdi:message-alert
+  register_type: holding
+  address: 2119
+  bitmask: 0x1
+- platform: modbus_controller
+  modbus_controller_id: modbus_device_1
+  name: "HP1 - Protection - Compressor oil return"
+  icon: mdi:message-alert
+  register_type: holding
+  address: 2119
+  bitmask: 0x8
+- platform: modbus_controller
+  modbus_controller_id: modbus_device_1
+  name: "HP1 - Protection - High Pressure switch"
+  icon: mdi:message-alert
+  register_type: holding
+  address: 2119
+  bitmask: 0x10     
+- platform: modbus_controller
+  modbus_controller_id: modbus_device_1
+  name: "HP1 - Protection - 1st start pre-heat"
+  icon: mdi:message-alert
+  register_type: holding
+  address: 2119
+  bitmask: 0x40     
+- platform: modbus_controller
+  modbus_controller_id: modbus_device_1
+  name: "HP1 - Protection - AC high/low voltage"
+  icon: mdi:message-alert
+  register_type: holding
+  address: 2119
+  bitmask: 0x200     
+- platform: modbus_controller
+  modbus_controller_id: modbus_device_1
+  name: "HP1 - Protection - Low pressure switch"
+  icon: mdi:message-alert
+  register_type: holding
+  address: 2119
+  bitmask: 0x1000    
+
