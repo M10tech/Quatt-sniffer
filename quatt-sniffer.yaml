@@ -35,11 +35,12 @@ external_components:
       #type: local
       #path: components
     components: [ modbus, modbus_controller]
+    refresh: 5min
 
 # Enable logging
 logger:
-  #baud_rate: 0                         ## Igor Ybema: make sure to turn of logging via UART (set baudrate to 0) as the RS485 uses the onboard UART (tx/rx)
-  #however, in sniffer mode and with detached TX hardware trace this is not needed
+  #baud_rate: 0                         ## Turn of logging via UART (set baudrate to 0) in case the RS485 uses the onboard UART (tx/rx)
+                                        ## However, in sniffer mode and with detached TX hardware trace this is not needed
   level: DEBUG
   logs:
     uart_debug: ERROR                  ## suppress log-messages from uart
@@ -48,11 +49,11 @@ logger:
     sensor: WARN                       ## suppress log-messages from modbus_controller
 
 # Configuration of UART with Quatt modbus connection-parameters
-uart:                 ## Igor Ybema: The RS485 is connected to the ESP32-C3 via hardware uart, rx/tx (gpio20/gpio21).
+uart:
   id: uart_bus
   # tx_pin: GPIO21    ## just listening: tx_pin not specified  BUT must kill TX output hardware trace anyway!
   rx_pin: GPIO23      ## on ESP32C3 use GPIO20, on ESP32 use GPIO23
-  baud_rate: 19200    ## start bit after 52us: 19200 baud see https://discord.com/chann...24364/1232080954466631761
+  baud_rate: 19200
   data_bits: 8
   parity: EVEN
   stop_bits: 1
