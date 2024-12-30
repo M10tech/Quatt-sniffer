@@ -365,6 +365,7 @@ size_t ModbusController::create_register_ranges_() {
 
 void ModbusController::dump_config() {
   ESP_LOGCONFIG(TAG, "ModbusController:");
+  ESP_LOGCONFIG(TAG, "Version: 0.7.3:");
   ESP_LOGCONFIG(TAG, "  Address: 0x%02X", this->address_);
   ESP_LOGCONFIG(TAG, "  Max Command Retries: %d", this->max_cmd_retries_);
   ESP_LOGCONFIG(TAG, "  Offline Skip Updates: %d", this->offline_skip_updates_);
