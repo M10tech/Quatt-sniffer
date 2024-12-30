@@ -173,6 +173,7 @@ bool Modbus::parse_modbus_byte_(uint8_t byte) {
 
 void Modbus::dump_config() {
   ESP_LOGCONFIG(TAG, "Modbus:");
+  ESP_LOGCONFIG(TAG, "Version: 0.7.3:");
   LOG_PIN("  Flow Control Pin: ", this->flow_control_pin_);
   ESP_LOGCONFIG(TAG, "  Send Wait Time: %d ms", this->send_wait_time_);
   ESP_LOGCONFIG(TAG, "  CRC Disabled: %s", YESNO(this->disable_crc_));
