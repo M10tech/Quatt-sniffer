@@ -37,4 +37,5 @@ packages:
 
 substitutions:
   throttling_value: 30s    ## apply this where wanted, see Voltage R2100 as example. By default, new reading every second!
+  uart_rx_pin: GPIO 20     ## on ESP32C3 use GPIO20, on ESP32 use GPIO23
 

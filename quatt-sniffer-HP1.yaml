@@ -22,7 +22,7 @@ logger:
 uart:
   id: uart_bus
   # tx_pin: GPIO21    ## just listening: tx_pin not specified  BUT must kill TX output hardware trace anyway!
-  rx_pin: GPIO20      ## on ESP32C3 use GPIO20, on ESP32 use GPIO23
+  rx_pin: ${uart_rx_pin}      ## on ESP32C3 use GPIO20, on ESP32 use GPIO23
   baud_rate: 19200
   data_bits: 8
   parity: EVEN
