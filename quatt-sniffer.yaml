@@ -26,9 +26,9 @@ substitutions:
 
 packages:
   HP1:
-    url: https://github.com/jeroen85/Quatt-sniffer
+    url: https://github.com/M10tech/Quatt-sniffer
     files: [quatt-sniffer-HP1.yaml]
   HP2:
-    url: https://github.com/jeroen85/Quatt-sniffer
+    url: https://github.com/M10tech/Quatt-sniffer
     files: [quatt-sniffer-HP2.yaml]
 
