@@ -1,6 +1,6 @@
 esphome:
   name: quatt-sniffer
-  friendly_name: QMBus
+  friendly_name: Quatt sniffer
 
 esp32:
   board: esp32dev
@@ -20,22 +20,15 @@ wifi:
   ssid: !secret wifi_ssid
   password: !secret wifi_password
 
-  # Enable fallback hotspot (captive portal) in case wifi connection fails
-  #ap:
-  #  ssid: "QMBus_AP"
-  #  password: !secret QMB_AP
-
-packages:
-  HP1: github://jeroen85/Quatt-sniffer/quatt-sniffer-package.yaml
-    vars:
-      HP_name: HP1
-      HP_id: 1
-  HP2: github://jeroen85/Quatt-sniffer/quatt-sniffer-package.yaml
-    vars:
-      HP_name: HP2
-      HP_id: 2
-
 substitutions:
   throttling_value: 30s    ## apply this where wanted, see Voltage R2100 as example. By default, new reading every second!
-  uart_rx_pin: GPIO 20     ## on ESP32C3 use GPIO20, on ESP32 use GPIO23
+  uart_rx_pin: GPIO20     ## on ESP32C3 use GPIO20, on ESP32 use GPIO23
+
+packages:
+  HP1:
+    url: https://github.com/jeroen85/Quatt-sniffer
+    files: [quatt-sniffer-HP1.yaml]
+  HP2:
+    url: https://github.com/jeroen85/Quatt-sniffer
+    files: [quatt-sniffer-HP2.yaml]
 
