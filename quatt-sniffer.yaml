@@ -28,7 +28,8 @@ packages:
   HP1:
     url: https://github.com/M10tech/Quatt-sniffer
     files: [quatt-sniffer-HP1.yaml]
-  HP2:
-    url: https://github.com/M10tech/Quatt-sniffer
-    files: [quatt-sniffer-HP2.yaml]
+  ##Uncomment lines below in case you have a Quatt Duo
+  # HP2:
+  #   url: https://github.com/M10tech/Quatt-sniffer
+  #   files: [quatt-sniffer-HP2.yaml]
 
