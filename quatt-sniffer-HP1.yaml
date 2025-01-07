@@ -5,6 +5,8 @@ external_components:
       url: https://github.com/M10tech/Quatt-sniffer
     components: [ modbus, modbus_controller]
     #refresh: 5min  ## use this temporarily if you recently updated the repo, else disable for default 24h
+  - source: github://pr#7547
+    components: [ api, event ]    
 
 # Enable logging
 logger:
