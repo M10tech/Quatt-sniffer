@@ -63,7 +63,7 @@ sensor: ## remember this setup MUST match the commands that a CIC sends to a Qua
   state_class: "measurement"
   accuracy_decimals: 1
   filters:
-    #- throttle: ${throttling_value}
+    - throttle: ${throttling_value}
     - multiply: 1
     - clamp:
         min_value: 0
@@ -80,6 +80,7 @@ sensor: ## remember this setup MUST match the commands that a CIC sends to a Qua
   state_class: "measurement"
   accuracy_decimals: 2
   filters:
+    - throttle: ${throttling_value}
     - multiply: 0.1
     - clamp:
         min_value: 0
@@ -96,6 +97,7 @@ sensor: ## remember this setup MUST match the commands that a CIC sends to a Qua
   state_class: "measurement"
   accuracy_decimals: 0
   filters:
+    - throttle: ${throttling_value}
     - multiply: 1
     - clamp:
         min_value: 0
@@ -112,6 +114,7 @@ sensor: ## remember this setup MUST match the commands that a CIC sends to a Qua
   state_class: "measurement"
   accuracy_decimals: 0
   filters:
+    - throttle: ${throttling_value}
     - multiply: 1
     - clamp:
         min_value: 0
@@ -130,6 +133,7 @@ sensor: ## remember this setup MUST match the commands that a CIC sends to a Qua
   state_class: "measurement"
   accuracy_decimals: 0
   filters:
+    - throttle: ${throttling_value}
     - multiply: 1
     - clamp:
         min_value: 0
@@ -148,6 +152,7 @@ sensor: ## remember this setup MUST match the commands that a CIC sends to a Qua
   state_class: "measurement"
   accuracy_decimals: 0
   filters:
+    - throttle: ${throttling_value}
     - multiply: 1
     - clamp:
         min_value: 0
@@ -163,6 +168,7 @@ sensor: ## remember this setup MUST match the commands that a CIC sends to a Qua
   state_class: "measurement"
   accuracy_decimals: 0
   filters:
+    - throttle: ${throttling_value}
     - multiply: 1
     - clamp:
         min_value: 0
@@ -188,6 +194,7 @@ sensor: ## remember this setup MUST match the commands that a CIC sends to a Qua
   state_class: "measurement"
   accuracy_decimals: 0
   filters:
+    - throttle: ${throttling_value}
     - multiply: 1
     - clamp:
         min_value: 0
@@ -204,6 +211,7 @@ sensor: ## remember this setup MUST match the commands that a CIC sends to a Qua
   state_class: "measurement"
   accuracy_decimals: 2
   filters:
+    - throttle: ${throttling_value}
     - offset: -3000
     - multiply: 0.01
     - clamp:
@@ -221,6 +229,7 @@ sensor: ## remember this setup MUST match the commands that a CIC sends to a Qua
   state_class: "measurement"
   accuracy_decimals: 2
   filters:
+    - throttle: ${throttling_value}
     - offset: -3000
     - multiply: 0.01
     - clamp:
@@ -238,6 +247,7 @@ sensor: ## remember this setup MUST match the commands that a CIC sends to a Qua
   state_class: "measurement"
   accuracy_decimals: 2
   filters:
+    - throttle: ${throttling_value}
     - offset: -3000
     - multiply: 0.01
     - clamp:
@@ -256,6 +266,7 @@ sensor: ## remember this setup MUST match the commands that a CIC sends to a Qua
   state_class: "measurement"
   accuracy_decimals: 2
   filters:
+    - throttle: ${throttling_value}
     - offset: -3000
     - multiply: 0.01
     - clamp:
@@ -273,6 +284,7 @@ sensor: ## remember this setup MUST match the commands that a CIC sends to a Qua
   state_class: "measurement"
   accuracy_decimals: 2
   filters:
+    - throttle: ${throttling_value}
     - multiply: 0.1
     - clamp:
         min_value: 0
@@ -289,6 +301,7 @@ sensor: ## remember this setup MUST match the commands that a CIC sends to a Qua
   state_class: "measurement"
   accuracy_decimals: 2
   filters:
+    - throttle: ${throttling_value}
     - multiply: 0.1
     - clamp:
         min_value: 0
@@ -327,6 +340,7 @@ sensor: ## remember this setup MUST match the commands that a CIC sends to a Qua
   state_class: "measurement"
   accuracy_decimals: 2
   filters:
+    - throttle: ${throttling_value}
     - offset: -3000
     - multiply: 0.01
     - clamp:
@@ -344,6 +358,7 @@ sensor: ## remember this setup MUST match the commands that a CIC sends to a Qua
   state_class: "measurement"
   accuracy_decimals: 2
   filters:
+    - throttle: ${throttling_value}
     - offset: -3000
     - multiply: 0.01
     - clamp:
@@ -361,6 +376,7 @@ sensor: ## remember this setup MUST match the commands that a CIC sends to a Qua
   state_class: "measurement"
   accuracy_decimals: 2
   filters:
+    - throttle: ${throttling_value}
     - offset: -3000
     - multiply: 0.01
     - clamp:
@@ -378,6 +394,7 @@ sensor: ## remember this setup MUST match the commands that a CIC sends to a Qua
   state_class: "measurement"
   accuracy_decimals: 2
   filters:
+    - throttle: ${throttling_value}
     - offset: -3000
     - multiply: 0.01
     - clamp:
@@ -396,6 +413,7 @@ sensor: ## remember this setup MUST match the commands that a CIC sends to a Qua
   state_class: "measurement"
   accuracy_decimals: 2
   filters:
+    - throttle: ${throttling_value}
     - offset: -3000
     - multiply: 0.01
     - clamp:
@@ -413,6 +431,7 @@ sensor: ## remember this setup MUST match the commands that a CIC sends to a Qua
   state_class: "measurement"
   accuracy_decimals: 2
   filters:
+    - throttle: ${throttling_value}
     - multiply: 0.1
 
 - platform: modbus_controller
@@ -426,6 +445,7 @@ sensor: ## remember this setup MUST match the commands that a CIC sends to a Qua
   icon: mdi:gauge
   accuracy_decimals: 2
   filters:
+    - throttle: ${throttling_value}
     - multiply: 0.618
 
 

@@ -10,18 +10,18 @@ esp32:
 # Enable Home Assistant API
 api:
   encryption:
-    key: !secret QMB_api
+    key: !secret api
 
 ota:
   - platform: esphome
-    password: !secret QMB_ota
+    password: !secret ota
 
 wifi:
   ssid: !secret wifi_ssid
   password: !secret wifi_password
 
 substitutions:
-  throttling_value: 30s    ## apply this where wanted, see Voltage R2100 as example. By default, new reading every second!
+  throttling_value: 10s    ##When set to 0s, new reading every second!
   uart_rx_pin: GPIO20     ## on ESP32C3 use GPIO20, on ESP32 use GPIO23
 
 packages:
