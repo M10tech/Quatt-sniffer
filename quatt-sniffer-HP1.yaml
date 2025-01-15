@@ -1,6 +1,6 @@
 esphome:
   project:
-    name: "Quatt.Modbus sniffer"
+    name: "Tweakers.Quatt Modbus sniffer"
     version: "v0.7.3"
 
 external_components:
