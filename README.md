@@ -52,26 +52,28 @@ And then there is the _actual_ measurement of the device delivering that unit
 | :---     | :--------------------------- | :---     | :--------------------------- |
 | R3999    | Working Mode set by CiC      | R2010    | Pump Mode set by CiC         |
 | R1999    | Compressor Level set by CiC  | R2015    | Pump Level set by CiC        |
-| R2099    | Working Mode Actual          | R2116    | Evaporator Pressure          |
-| R2100    | Compressor AC Voltage        | R2117    | Condenser Pressure           |
-| R2101    | Compressor AC Current        | R2118b0  | Defrost Mode                 |
-| R2102    | Compressor Frequency Demand  | R2119b0  | Alarm - Main Line Current    |
-| R2103    | Compressor Frequency Actual  | R2119b3  | Info - Compressor Oil Return |
-| R2104    | Fan Speed Maximum            | R2119b4  | Alarm - High Pressure Switch |
-| R2105    | Fan Speed Actual             | R2119b6  | Alarm - 1st Start Pre-heat   |
-| R2107    | Electric Expansion Valve     | R2119b9  | Alarm - AC High/Low Voltage  |
-| R2108b2  | Bottom Heater                | R2119b12 | Alarm - Low Pressure Switch  |
-| R2108b3  | Crankcase Heater             | R2119    | Status bits R2119            |
-| R2108b0  | Fan Low Speed Mode           | R2120    | Status bits R2120            |
-| R2108b4  | Fan Defrost Speed Mode       | R2121    | Status bits R2121            |
-| R2108b5  | Fan High Speed Mode          | R2122/23 | Firmware/EEPROM Version      |
-| R2108b6  | 4way Valve                   | R2131    | Condensing Temperature       |
-| R2108b11 | Pump Relay                   | R2132    | Evaporating Temperature      |
-| R2108bx  | Other bits R2108             | R2133    | Water In Temperature         |
-| R2110    | Outside Temperature          | R2134    | Water Out Temperature        |
-| R2111    | Evaporator Coil Temperature  | R2135    | Condenser Coil Temperature   |
-| R2112    | Gas Discharge Temperature    | R2137    | Pump Power                   |
-| R2113    | Gas Return Temperature       | R2138    | Pump Flow                    |
+| R2006    | Silent mode set by CiC       | R2116    | Evaporator Pressure          |
+| R2099    | Working Mode Actual          | R2117    | Condenser Pressure           |
+| R2100    | Compressor AC Voltage        | R2118b0  | Defrost Mode                 |
+| R2101    | Compressor AC Current        | R2119b0  | Alarm - Main Line Current    |
+| R2102    | Compressor Frequency Demand  | R2119b3  | Info - Compressor Oil Return |
+| R2103    | Compressor Frequency Actual  | R2119b4  | Alarm - High Pressure Switch |
+| R2104    | Fan Speed Maximum            | R2119b6  | Alarm - 1st Start Pre-heat   |
+| R2105    | Fan Speed Actual             | R2119b9  | Alarm - AC High/Low Voltage  |
+| R2107    | Electric Expansion Valve     | R2119b12 | Alarm - Low Pressure Switch  |
+| R2108b2  | Bottom Heater                | R2119    | Status bits R2119            |
+| R2108b3  | Crankcase Heater             | R2120    | Status bits R2120            |
+| R2108b0  | Fan Low Speed Mode           | R2121    | Status bits R2121            |
+| R2108b4  | Fan Defrost Speed Mode       | R2122/23 | Firmware        Version      |
+| R2108b5  | Fan High Speed Mode          | R2123    | EEPROM Version               |
+| R2108b6  | 4way Valve                   | R2127    | Main control board item No   |
+| R2108b11 | Pump Relay                   | R2131    | Condensing Temperature       |
+| R2108bx  | Other bits R2108             | R2132    | Evaporating Temperature      |
+| R2110    | Outside Temperature          | R2133    | Water In Temperature         |
+| R2111    | Evaporator Coil Temperature  | R2134    | Water Out Temperature        |
+| R2112    | Gas Discharge Temperature    | R2135    | Condenser Coil Temperature   |
+| R2113    | Gas Return Temperature       | R2137    | Pump Power                   |
+| R2115    | DIPswitch readout            | R2138    | Pump Flow                    |
 
 <img src="https://github.com/M10tech/Quatt-sniffer/blob/main/Quatt-Concepts.png" width="600" />  
 
@@ -111,6 +113,19 @@ Use all this information to set up the registers in the yaml to match what happe
 Do not forget to disable verbose logging once you have an idea of the registers...
 
 ### History
+
+#### 2.0.0 matching CiC firmware 4.2.0+
+- CiC now uses 7 blocks for reading instead of one and functioncode 16 instead of 6
+- added command 2006 for silent mode (whatever that is)
+- added DIPswitch register 2115
+- added Main control board item No register 2127
+- added registers 11160x20 and 11219x20 as ignored
+  (you could add those if you know what they mean and your Quatt supports them)
+- fixed a '/' in a name to '\' to prevent future error
+- updated modbus.cpp to translate a function code 16 request in a code 6 response
+  (only works if number of registers is 1, which it is (for now))
+- tested with 2026.1.3 but initial syncing can take a long time (even an hour)
+  (just give it time, usually it works fine once it syncs (and blame arduino loop architecture))
 
 #### 1.1.0 sync with 2025.5.0 situation
 - removed PR7547 reference since that is now part of release 2025.3.0 and later

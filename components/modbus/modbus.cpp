@@ -92,10 +92,22 @@ bool Modbus::parse_modbus_byte_(uint8_t byte) {
     }
 
     // the response for write command mirrors the requests and data starts at offset 2 instead of 3 for read commands
-    if (function_code == 0x5 || function_code == 0x06 || function_code == 0xF || function_code == 0x10) {
+    if (function_code == 0x5 || function_code == 0x06) {
       data_offset = 2;
       data_len = 4;
     }
+
+    // the response for write multi command does not mirror the requests
+    if (function_code == 0xF || function_code == 0x10) {
+      if (this->current_role_ == ModbusRole::SERVER) {
+        data_offset = 2;
+        data_len = 7; //this hack only works for a single register at the moment...
+      } else {
+        data_offset = 2;
+        data_len = 4;
+      }
+    }
+
 
     // Error ( msb indicates error )
     // response format:  Byte[0] = device address, Byte[1] function code | 0x80 , Byte[2] exception code, Byte[3-4] crc
@@ -132,6 +144,20 @@ bool Modbus::parse_modbus_byte_(uint8_t byte) {
         this->register_count=uint16_t(data[3]) | (uint16_t(data[2]) << 8);
       else if (function_code == 0x5 || function_code == 0x06)
         this->register_count=1;
+      else if (function_code == 0xF || function_code == 0x10) {
+        bool found = false;
+        for (auto *device : this->devices_) {
+          if (device->address_ == address) {
+            data[2]=data[5]; data[3]=data[6]; //hack to convert in a single register report
+            this->register_count=1; //TODO: check if to remove extra 3 bytes from data??
+            device->on_modbus_message(function_code-10, this->start_address_, this->register_count, data); //FC-=10 !!
+            found = true;
+          }
+        }
+        if (!found) {
+          ESP_LOGW(TAG, "Got Modbus frame from unknown address 0x%02X! ", address);
+        }
+      }
       else
         this->register_count=0;
     }
@@ -147,6 +173,8 @@ bool Modbus::parse_modbus_byte_(uint8_t byte) {
         if ((function_code & 0x80) == 0x80) {
           ESP_LOGD(TAG, "Modbus error function code: 0x%X exception: %d", function_code, raw[2]);
           device->on_modbus_error(function_code & 0x7F, raw[2]); //TODO: will replace with on_modbus_message_error?(fc,start_addr,num_reg,err);
+        } else if (function_code == 0xF || function_code == 0x10) {
+          //do nothing, it gets done at the server side
         } else {
           device->on_modbus_message(function_code, this->start_address_, this->register_count, data);
         }
@@ -174,7 +202,7 @@ bool Modbus::parse_modbus_byte_(uint8_t byte) {
 
 void Modbus::dump_config() {
   ESP_LOGCONFIG(TAG, "Modbus:");
-  ESP_LOGCONFIG(TAG, "Version: 1.1.X");
+  ESP_LOGCONFIG(TAG, "Version: 2.0.X");
   LOG_PIN("  Flow Control Pin: ", this->flow_control_pin_);
   ESP_LOGCONFIG(TAG, "  Send Wait Time: %d ms", this->send_wait_time_);
   ESP_LOGCONFIG(TAG, "  CRC Disabled: %s", YESNO(this->disable_crc_));

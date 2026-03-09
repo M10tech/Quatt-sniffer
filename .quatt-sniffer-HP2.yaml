@@ -21,6 +21,12 @@ sensor: ## remember this setup MUST match the commands that a CIC sends to a Qua
 
 - platform: modbus_controller
   modbus_controller_id: modbus_device_2
+  name: "HP2 - Silent Mode set by CiC"
+  register_type: holding
+  address: 2006
+
+- platform: modbus_controller
+  modbus_controller_id: modbus_device_2
   name: "HP2 - Pump Mode set by CiC"
   register_type: holding
   address: 2010
@@ -45,8 +51,7 @@ sensor: ## remember this setup MUST match the commands that a CIC sends to a Qua
   register_type: holding
   address: 3999
 
-## next, use register_count: to make one read range from 2099 to 2138
-## https://esphome.io/components/modbus_controller#optimizing-modbus-communications
+## read register blocks
 - platform: modbus_controller
   modbus_controller_id: modbus_device_2
   name: "HP2 - Working Mode Actual"
@@ -146,7 +151,6 @@ sensor: ## remember this setup MUST match the commands that a CIC sends to a Qua
   icon: mdi:fan
   register_type: holding
   address: 2105
-  register_count: 2 ## fill gap for 2106
   unit_of_measurement: "RPM"
   device_class: "speed"
   state_class: "measurement"
@@ -185,23 +189,7 @@ sensor: ## remember this setup MUST match the commands that a CIC sends to a Qua
   filters:
     - multiply: 2   ## due to bitmask doing mask_and_shift_by_rightbit our mask divides by 2 which we undo
 
-## we cannot remove this register since this will mess up the previous bitmask register, so internal=true
-- platform: modbus_controller
-  modbus_controller_id: modbus_device_2
-  name: "HP2 - EV1 steps"
-  internal: true
-  register_type: holding
-  address: 2109
-  unit_of_measurement: "p"
-  state_class: "measurement"
-  accuracy_decimals: 0
-  filters:
-    - throttle: ${throttling_value}
-    - multiply: 1
-    - clamp:
-        min_value: 0
-        max_value: 1000
-        ignore_out_of_range: true
+## we could not remove this register since this would mess up the previous bitmask register, so internal=true
 
 - platform: modbus_controller
   modbus_controller_id: modbus_device_2
@@ -257,24 +245,30 @@ sensor: ## remember this setup MUST match the commands that a CIC sends to a Qua
         max_value: 150
         ignore_out_of_range: true
 
+#- platform: modbus_controller
+#  modbus_controller_id: modbus_device_2
+#  name: "HP2 - Gas Return Temperature"
+#  register_type: holding
+#  address: 2113
+#  register_count: 3 ## fill gap for 2114-2115
+#  unit_of_measurement: "°C"
+#  device_class: "temperature"
+#  state_class: "measurement"
+#  accuracy_decimals: 2
+#  filters:
+#    - throttle: ${throttling_value}
+#    - offset: -3000
+#    - multiply: 0.01
+#    - clamp:
+#        min_value: -30
+#        max_value: 100
+#        ignore_out_of_range: true
+
 - platform: modbus_controller
   modbus_controller_id: modbus_device_2
-  name: "HP2 - Gas Return Temperature"
+  name: "HP2 - DIPswitch"
   register_type: holding
-  address: 2113
-  register_count: 3 ## fill gap for 2114-2115
-  unit_of_measurement: "°C"
-  device_class: "temperature"
-  state_class: "measurement"
-  accuracy_decimals: 2
-  filters:
-    - throttle: ${throttling_value}
-    - offset: -3000
-    - multiply: 0.01
-    - clamp:
-        min_value: -30
-        max_value: 100
-        ignore_out_of_range: true
+  address: 2115
 
 - platform: modbus_controller
   modbus_controller_id: modbus_device_2
@@ -342,7 +336,12 @@ sensor: ## remember this setup MUST match the commands that a CIC sends to a Qua
   name: "HP2 - EEPROM Version"
   register_type: holding
   address: 2123
-  register_count: 8 ## fill gap for 2124-2130
+
+- platform: modbus_controller
+  modbus_controller_id: modbus_device_2
+  name: "HP2 - Main control board item No."
+  register_type: holding
+  address: 2127
 
 - platform: modbus_controller
   modbus_controller_id: modbus_device_2
@@ -416,24 +415,24 @@ sensor: ## remember this setup MUST match the commands that a CIC sends to a Qua
         max_value: 100
         ignore_out_of_range: true
 
-- platform: modbus_controller
-  modbus_controller_id: modbus_device_2
-  name: "HP2 - Condenser Coil Temperature"
-  register_type: holding
-  address: 2135
-  register_count: 2 ## fill gap for 2136
-  unit_of_measurement: "°C"
-  device_class: "temperature"
-  state_class: "measurement"
-  accuracy_decimals: 2
-  filters:
-    - throttle: ${throttling_value}
-    - offset: -3000
-    - multiply: 0.01
-    - clamp:
-        min_value: -30
-        max_value: 100
-        ignore_out_of_range: true
+#- platform: modbus_controller
+#  modbus_controller_id: modbus_device_2
+#  name: "HP2 - Condenser Coil Temperature"
+#  register_type: holding
+#  address: 2135
+#  register_count: 2 ## fill gap for 2136
+#  unit_of_measurement: "°C"
+#  device_class: "temperature"
+#  state_class: "measurement"
+#  accuracy_decimals: 2
+#  filters:
+#    - throttle: ${throttling_value}
+#    - offset: -3000
+#    - multiply: 0.01
+#    - clamp:
+#        min_value: -30
+#        max_value: 100
+#        ignore_out_of_range: true
 
 - platform: modbus_controller
   modbus_controller_id: modbus_device_2
@@ -461,6 +460,22 @@ sensor: ## remember this setup MUST match the commands that a CIC sends to a Qua
   filters:
     - throttle: ${throttling_value}
     - multiply: 0.618
+
+- platform: modbus_controller
+  modbus_controller_id: modbus_device_2
+  name: "HP2 - Ignore11160"
+  internal: true
+  register_type: holding
+  register_count: 20
+  address: 11160
+
+- platform: modbus_controller
+  modbus_controller_id: modbus_device_2
+  name: "HP2 - Ignore11219"
+  internal: true
+  register_type: holding
+  register_count: 20
+  address: 11219
 
 
 binary_sensor:
@@ -546,7 +561,7 @@ binary_sensor:
   bitmask: 0x40
 - platform: modbus_controller
   modbus_controller_id: modbus_device_2
-  name: "HP2 - Alarm - AC High/Low Voltage" #R2119b9
+  name: "HP2 - Alarm - AC High\Low Voltage" #R2119b9
   icon: mdi:message-alert
   register_type: holding
   address: 2119
