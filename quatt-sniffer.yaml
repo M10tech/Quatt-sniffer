@@ -25,6 +25,7 @@ substitutions:
 packages:
   ## Uncomment one ESP-line below that represents your chipset
   #ESP: github://M10tech/Quatt-sniffer/.quatt-sniffer-ESP32C3.yaml ## Uses GPIO20
+  #ESP: github://M10tech/Quatt-sniffer/.quatt-sniffer-ESP32S3.yaml ## Uses GPIO06
   #ESP: github://M10tech/Quatt-sniffer/.quatt-sniffer-ESP32.yaml   ## Uses GPIO23
   #
   HP1: github://M10tech/Quatt-sniffer/.quatt-sniffer-HP1.yaml ## Always needed

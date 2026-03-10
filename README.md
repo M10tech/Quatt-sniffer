@@ -1,10 +1,10 @@
-# Quatt-sniffer  (c) 2024-2025 M10tech
+# Quatt-sniffer  (c) 2024-2026 M10tech
 
 Purpose of this repo is to sniff info from the Quatt modbus interface into HomeAssistant
 
 Reusing the framework of modbus and modbus_controller we introduce the role `sniffer`  
 By using the `register_count` concept, we create the same register-ranges as are present on the bus.  
-For Quatt, there are four write commands (FC=6) and one read command (FC=3)
+For Quatt, there are five write commands (FC=16) and seven read commands (FC=3)
 
 ## Setup
 - disable the physical TX hardware in case your RS485-board does not have an explicit TX pin (aka auto TX mode)!!!
@@ -27,6 +27,9 @@ For Quatt, there are four write commands (FC=6) and one read command (FC=3)
 - NOW, if you feel like tuning, you can change as you like
 - if a new version of the repo is available, you can re-copy or update the `quatt-sniffer.yaml` and recompile + install
 
+NOTE that from 2026 or so, the syncing can take long, even more than an hour.  
+But give it time, as long as you see CRC errors coming in all the time.
+
 #### example setup
 ![](https://github.com/M10tech/Quatt-sniffer/blob/main/Quatt-Sniffer-Ybema-foto.jpg)  
 Red arrows: removal of 120 ohm (R2) and pull-up/down (R1/R3)  
@@ -40,8 +43,7 @@ If you don't have a solder iron, just cut a gap in them with a cutter, with care
 ESP32 with [RS485 board](https://www.aliexpress.com/item/1005006727769995.html) also works...
 
 ### What does it all mean
-There are 40 registers that get read and 4 registers that send orders to the Quatt.  
-Not all read registers are known for their meaning, and of those many are static over all time observed.
+There are 30 registers that get read and 5 registers that send orders to the Quatt.
 
 A _mode_ is either on or off  
 A _level_ can take discrete values, but is not directly a physical unit  
@@ -64,7 +66,7 @@ And then there is the _actual_ measurement of the device delivering that unit
 | R2108b2  | Bottom Heater                | R2119    | Status bits R2119            |
 | R2108b3  | Crankcase Heater             | R2120    | Status bits R2120            |
 | R2108b0  | Fan Low Speed Mode           | R2121    | Status bits R2121            |
-| R2108b4  | Fan Defrost Speed Mode       | R2122/23 | Firmware        Version      |
+| R2108b4  | Fan Defrost Speed Mode       | R2122    | Firmware Version             |
 | R2108b5  | Fan High Speed Mode          | R2123    | EEPROM Version               |
 | R2108b6  | 4way Valve                   | R2127    | Main control board item No   |
 | R2108b11 | Pump Relay                   | R2131    | Condensing Temperature       |
@@ -94,7 +96,8 @@ processing takes care of sending the selected registers into HA.
 These two override components are not compatible with the originals anymore,  
 however, the intent is that it would be possible to merge them again.  
 As such, this would then become an extension of the originals.  
-If time and demand come together, this might happen.
+If time and demand come together, this might happen.  
+With 2.0.0 however this is less likely and no-one has shown interest over the last years anyway...
 
 There was an issue that did not allow high volume sensor updates without missing data.
 This was solved in ESPhome since 2025.3.0
@@ -114,6 +117,27 @@ Do not forget to disable verbose logging once you have an idea of the registers.
 
 ### History
 
+#### 2.0.1 support ESP32S3 and fix readme glitches
+- ESP32S3 from isolated RS-485 transceiver by MarcoW71 added
+
+Sample from CiC 4.2.0 without CRC16:
+```
+ 1999 x  1 command 01 10 07 cf 00 01 02 00 01  response  8 01 10 07 cf 00 01
+ 2006 x  1 command 01 10 07 d6 00 01 02 00 00  response  8 01 10 07 d6 00 01
+ 2010 x  1 command 01 10 07 da 00 01 02 10 00  response  8 01 10 07 da 00 01
+ 2015 x  1 command 01 10 07 df 00 01 02 01 92  response  8 01 10 07 df 00 01
+ 3999 x  1 command 01 10 0f 9f 00 01 02 00 02  response  8 01 10 0f 9f 00 01
+ 2099 x  7 command 01 03 08 33 00 07  response  19 01 03 0e 00 02 00 e1 00 10 00 1e 00 1e 02 bc 02 6e
+ 2107 x  2 command 01 03 08 3b 00 02  response   9 01 03 04 01 b7 08 01
+ 2110 x  3 command 01 03 08 3e 00 03  response  11 01 03 06 0e b4 0d 9c 23 ff
+ 2115 x  9 command 01 03 08 43 00 09  response  23 01 03 12 18 00 00 54 00 d5 00 00 00 00 00 00 00 00 01 1e 00 72
+ 2127 x  1 command 01 03 08 4f 00 01  response   7 01 03 02 0e 37
+ 2131 x  4 command 01 03 08 53 00 04  response  13 01 03 08 19 f3 0d b4 18 0f 19 1b
+ 2137 x  2 command 01 03 08 59 00 02  response   9 01 03 04 01 22 05 1c
+11160 x 20 command 01 03 2b 98 00 14  response  45 01 03 28 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+11219 x 20 command 01 03 2b d3 00 14  response  45 01 03 28 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+```
+
 #### 2.0.0 matching CiC firmware 4.2.0+
 - CiC now uses 7 blocks for reading instead of one and functioncode 16 instead of 6
 - added command 2006 for silent mode (whatever that is)
@@ -121,7 +145,7 @@ Do not forget to disable verbose logging once you have an idea of the registers.
 - added Main control board item No register 2127
 - added registers 11160x20 and 11219x20 as ignored
   (you could add those if you know what they mean and your Quatt supports them)
-- fixed a '/' in a name to '\' to prevent future error
+- fixed a '/' in a name to '\\' to prevent future error
 - updated modbus.cpp to translate a function code 16 request in a code 6 response
   (only works if number of registers is 1, which it is (for now))
 - tested with 2026.1.3 but initial syncing can take a long time (even an hour)
@@ -239,7 +263,7 @@ Do not forget to disable verbose logging once you have an idea of the registers.
 - they provide a reasonable startpoint
 - and a esphome yaml file to match
 
-### Sample
+### Sample before CiC 4.2.0
 ```
 01 06 07cf 0000 b881
 01 06 07cf 0000 b881

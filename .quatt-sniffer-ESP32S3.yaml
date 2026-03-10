@@ -1,0 +1,7 @@
+esp32:
+  board: esp32-s3-devkitm-1
+  framework:
+    type: arduino
+
+substitutions:
+  uart_rx_pin: GPIO06 ## isolated RS-485 transceiver MarcoW71
